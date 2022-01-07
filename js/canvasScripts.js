@@ -3,6 +3,7 @@ const canvas01 = htmlCanvas01.getContext("2d");
 // Изменение размеров холста равных размерам страницы при загрузке страницы.
 htmlCanvas01.width = window.innerWidth;
 htmlCanvas01.height = window.innerHeight;
+canvas01.globalCompositeOperation = "destionation-over";
 
 // Центр холста Canvas1.
 const centerCanvas1 = {
@@ -20,31 +21,55 @@ let hue = Math.random() * 360;
 let number = 0;
 // Минимальное значение для начала скалирования.
 let scale = 10;
-canvas01.translate(htmlCanvas01.width / 2, htmlCanvas01.height / 2);
-
 function drawCircle() {
   // Угол колебания sin и cos.
-  let angle = number * 0.5;
+  let angle = number * 100;
   // Значение увеличения радиуса колебания sin и cos.
   let radius = scale * Math.sqrt(number);
   // Отрисовка окружности через рекурсию с использованием sin и cos.
-  let positionX = radius * Math.sin(angle);
-  let positionY = radius * Math.cos(angle);
+  let positionX = radius * Math.sin(angle) + htmlCanvas01.width / 2;
+  let positionY = radius * Math.cos(angle) + htmlCanvas01.height / 2;
   canvas01.beginPath();
   canvas01.fillStyle = "hsl(" + hue + ", 50%, 50%)";
   canvas01.strokeStyle = "black";
-  canvas01.lineWidth = 2;
+  canvas01.lineWidth = 1;
   canvas01.arc(positionX, positionY, 20, 0, Math.PI * 2);
   canvas01.closePath();
   canvas01.fill();
   canvas01.stroke();
   number++;
 }
-
 function animate() {
   hue++;
-  if (number >= 2000) number = 0;
+  if (number >= 1000) {
+    number = 0;
+  }
   drawCircle();
   requestAnimationFrame(animate);
 }
-animate();
+// animate();
+smallCircleNum = 0;
+smallCircleScail = 10;
+function drawSmallCircle() {
+  let angle = smallCircleNum * 1;
+  let radius = smallCircleScail * Math.sqrt(smallCircleNum);
+  let x = radius * Math.sin(angle) + htmlCanvas01.width / 2;
+  let y = radius * Math.cos(angle) + htmlCanvas01.height / 2;
+
+  canvas01.beginPath();
+  canvas01.fillStyle = "hsl(" + hue + ", 50%, 50%)";
+  canvas01.strokeStyle = "black";
+  canvas01.lineWidth = 1;
+  canvas01.arc(x, y, 15, 0, Math.PI * 2);
+  canvas01.fill();
+  canvas01.stroke();
+  canvas01.closePath();
+  smallCircleNum = smallCircleNum += 0.3;
+  hue++;
+}
+function animateDrawCircle() {
+  if (smallCircleNum >= 500) smallCircleNum = 0;
+  drawSmallCircle();
+  requestAnimationFrame(animateDrawCircle);
+}
+animateDrawCircle();
